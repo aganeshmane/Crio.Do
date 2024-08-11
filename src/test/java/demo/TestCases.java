@@ -1,12 +1,15 @@
 package demo;
 import java.time.Duration;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -55,15 +58,17 @@ public class TestCases {
     }
 
     @Test
-    public void testcase01() throws InterruptedException{
+    public void testCase01() throws InterruptedException{
         //Navigate to google form
         driver.get("https://forms.gle/wjPkzeSEk1CM7KgGA");
+        System.out.println("Google Form is Opening:");
         Thread.sleep(5000);
-        WebElement nameinputTextBox = driver.findElement(By.xpath("(//div[contains(@class,'oJeWuf')]//input[@type='text'])[1]"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebElement nameinputTextBox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//div[contains(@class,'oJeWuf')]//input[@type='text'])[1]")));
         Wrappers.enterText(nameinputTextBox, "Crio Learner");
         Thread.sleep(5000);
 
-        WebElement practicingAutomationTextArea = driver.findElement(By.xpath("//textarea[contains(@class, 'tL9Q4c')]"));
+        WebElement practicingAutomationTextArea = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//textarea[contains(@class, 'tL9Q4c')]")));
         String practingAutomationText = "I want to be the best QA Engineer!";
         //Create epoch time as string
         String epochTimeString = Wrappers.getEpochTimeAsString();
@@ -71,6 +76,7 @@ public class TestCases {
 
         //Select the radio button as per automation exp
         Wrappers.radioButton(driver, "0 - 2");
+        System.out.println("Radio Button selected as per my exp");
         Thread.sleep(3000);
         
         //Select the checkBox for skilSet
@@ -78,11 +84,12 @@ public class TestCases {
         Wrappers.checkBox(driver, "Selenium");
         Wrappers.checkBox(driver, "TestNG");
         Thread.sleep(3000);
+        System.out.println("CheckBox selected as per option i provided");
 
         //Click on dropdown
         WebElement dropDoWebElement = driver.findElement(By.xpath("//div[@jsname='LgbsSe']"));
         Wrappers.clickOnElement(driver, dropDoWebElement);
-        Thread.sleep(3000);
+        wait.until(ExpectedConditions.elementToBeClickable(dropDoWebElement));
         Wrappers.dropDownClick(driver, "Mr");
         Thread.sleep(3000);
 
@@ -113,6 +120,7 @@ public class TestCases {
 
         //Validate the success message
         WebElement successmsgElement =driver.findElement(By.xpath("//div[text()='Thanks for your response, Automation Wizard!']"));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='Thanks for your response, Automation Wizard!']")));
         Assert.isTrue(successmsgElement.isDisplayed(),successmsgElement.getText());
         System.out.println(successmsgElement.getText());
         Thread.sleep(3000);
